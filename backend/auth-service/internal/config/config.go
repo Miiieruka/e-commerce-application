@@ -8,21 +8,29 @@ import (
 	"github.com/ilyakaznacheev/cleanenv"
 )
 
+type Config struct {
+	Env         string   `yaml:"env" env-default:"local"`
+	DB          DBCOnfig `yaml:"db"`
+	HTTPServer  `yaml:"http_server"`
+	GoogleOAuth GoogleOAuth `yaml:"google_oauth"`
+	JwtSecret   string      `yaml:"jwt_secret"`
+}
+
 type DBCOnfig struct {
 	Driver string `yaml:"driver" env-default:"postgre"`
 	DSN    string `yaml:"dsn" env-required:"true"`
 }
 
-type Config struct {
-	Env        string   `yaml:"env" env-default:"local"`
-	DB         DBCOnfig `yaml:"db"`
-	HTTPServer `yaml:"http_server"`
+type GoogleOAuth struct {
+	ClientID     string `yaml:"client_id"`
+	ClientSecret string `yaml:"client_secret"`
+	RedirectURL  string `yaml:"redirect_url"`
 }
 
 type HTTPServer struct {
-	address      string        `yaml:"address" env-default:"localhost:8080"`
-	timeout      time.Duration `yaml:"timeout" env-default:"4s"`
-	idle_timeout time.Duration `yaml:"idle_timeout" env-default:"30s"`
+	Address      string        `yaml:"address" env-default:"localhost:8080"`
+	Timeout      time.Duration `yaml:"timeout" env-default:"4s"`
+	Idle_timeout time.Duration `yaml:"idle_timeout" env-default:"30s"`
 }
 
 func MustLoad() *Config {
