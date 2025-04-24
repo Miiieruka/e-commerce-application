@@ -1,2 +1,2 @@
 Makefile
-./config/config.yaml
+auth-service/config/config.yaml
