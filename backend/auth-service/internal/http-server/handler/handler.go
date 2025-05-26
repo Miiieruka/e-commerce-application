@@ -22,6 +22,9 @@ func (handler *AuthHandler) SetupRoutes() *gin.Engine {
 		auth.POST("/register", handler.Register)
 		auth.POST("/login", handler.Login)
 	}
+	protected := router.Group("/auth")
+	protected.Use()
+
 
 	return router
 }

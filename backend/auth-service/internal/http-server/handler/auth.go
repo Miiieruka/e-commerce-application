@@ -39,3 +39,13 @@ func (h *AuthHandler) Login(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, gin.H{"token": token})
 
 }
+
+func (h *AuthHandler) UserInfo(c *gin.Context) {
+	userID := c.GetString("user_id")
+	role := c.GetString("role")
+
+	c.IndentedJSON(http.StatusOK, gin.H{
+		"user_id": userID,
+		"role":    role,
+	})
+}
