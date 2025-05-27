@@ -2,11 +2,15 @@ package service
 
 import (
 	"auth-service/internal/http-server/repository"
+	"context"
+	"encoding/json"
 	"errors"
+	"fmt"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
 	"golang.org/x/crypto/bcrypt"
+	"golang.org/x/oauth2"
 )
 
 var (
@@ -59,4 +63,43 @@ func (as *AuthService) Login(req LoginRequest) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
 	return token.SignedString([]byte(as.jwt))
+}
+
+func (as *AuthService) GoogleOAuthLogin(token *oauth2.Token) (string, error) {
+	client := oauth2.NewClient(context.Background(), oauth2.StaticTokenSource(token))
+	resp, err := client.Get("https://www.googleapis.com/oauth2/v2/userinfo")
+
+	if err != nil {
+		return "", fmt.Errorf("Google.Auth.login: %w", err)
+	}
+	defer resp.Body.Close()
+
+	var us GoogleUser
+
+	if err := json.NewDecoder(resp.Body).Decode(&us); err != nil {
+		return "", fmt.Errorf("Google.Auth.login: %w", err)
+	}
+	user, err := as.repo.GetUserByUsername(us.Email)
+
+	if err != nil {
+		newUser := &repository.User{
+			Username: us.Name,
+			Email:    us.Email,
+			Password: "",
+			Role:     "buyer",
+		}
+		err = as.repo.CreateUser(newUser)
+		if err != nil {
+			return "", fmt.Errorf("Google.Auth.login: %w", err)
+		}
+		user = newUser
+	}
+
+	claims := jwt.MapClaims{
+		"user_id": user.ID,
+		"role":    user.Role,
+		"exp":     time.Now().Add(time.Hour * 12).Unix(),
+	}
+	tokenJwt := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	return tokenJwt.SignedString([]byte(as.jwt))
 }

@@ -2,6 +2,7 @@ package handler
 
 import (
 	"auth-service/internal/http-server/service"
+	"context"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -48,4 +49,26 @@ func (h *AuthHandler) UserInfo(c *gin.Context) {
 		"user_id": userID,
 		"role":    role,
 	})
+}
+
+func (h *AuthHandler) GoogleLogin(c *gin.Context) {
+	url := service.GoogleOAuthConfig.AuthCodeURL("state-token")
+	c.Redirect(http.StatusTemporaryRedirect, url)
+}
+
+func (h *AuthHandler) GoogleCallBack(c *gin.Context) {
+	code := c.Query("code")
+	token, err := service.GoogleOAuthConfig.Exchange(context.Background(), code)
+	if err != nil {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "token exchange failed"})
+		return
+	}
+	jwtToken, err := h.srv.GoogleOAuthLogin(token)
+	if err != nil {
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "Login failed"})
+		return
+	}
+
+	c.IndentedJSON(http.StatusOK, gin.H{"error": jwtToken})
+
 }

@@ -21,10 +21,11 @@ func (handler *AuthHandler) SetupRoutes() *gin.Engine {
 	{
 		auth.POST("/register", handler.Register)
 		auth.POST("/login", handler.Login)
+		auth.GET("/google/login", handler.GoogleLogin)
+		auth.GET("/google/callback", handler.GoogleCallBack)
 	}
 	protected := router.Group("/auth")
 	protected.Use()
-
 
 	return router
 }

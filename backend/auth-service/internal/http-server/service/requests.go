@@ -11,3 +11,8 @@ type RegisterRequest struct {
 	Password string `json:"password" binding:"required,min=6"`
 	Role     string `json:"role" binding:"required,oneof=buyer seller"`
 }
+
+type GoogleUser struct {
+	Email string `json:"email"`
+	Name  string `json:"password"`
+}

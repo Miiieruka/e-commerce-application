@@ -27,6 +27,7 @@ func main() {
 
 	rep := repository.NewUserRepository(db)
 	serv := service.NewAuthService(rep, config.JwtSecret)
+	service.InitGoogleOAuth(config.GoogleOAuth)
 	handler := handler.NewAuthHandler(serv)
 
 	router := handler.SetupRoutes()
