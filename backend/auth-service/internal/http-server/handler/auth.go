@@ -69,6 +69,6 @@ func (h *AuthHandler) GoogleCallBack(c *gin.Context) {
 		return
 	}
 
-	c.IndentedJSON(http.StatusOK, gin.H{"error": jwtToken})
+	c.IndentedJSON(http.StatusOK, gin.H{"token": jwtToken})
 
 }

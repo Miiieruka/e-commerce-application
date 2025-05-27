@@ -1,2 +1,3 @@
 Makefile
 auth-service/config/config.yaml
+user-service/config/config.yaml
