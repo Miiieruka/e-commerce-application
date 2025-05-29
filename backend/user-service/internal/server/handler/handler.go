@@ -7,24 +7,22 @@ import (
 )
 
 type Handler struct {
-	serv *service.Service
+	serv      *service.Service
+	jwtsecret string
 }
 
-func NewHandler(serv *service.Service) *Handler {
+func NewHandler(serv *service.Service, jwtsecret string) *Handler {
 	return &Handler{
-		serv: serv,
+		serv:      serv,
+		jwtsecret: jwtsecret,
 	}
 }
 
 func (h *Handler) InitRoutes() *gin.Engine {
-	router := gin.New()
-	router.Use(gin.Recovery())
-	router.Use(JwtMiddleware())
+	router := gin.Default()
+	router.Use(h.JwtMiddleware())
 
-	router.Group("/user")
-	{
-		router.GET("/me")
-	}
+	router.GET("/user/me", h.GetProfile)
 
 	return router
 }

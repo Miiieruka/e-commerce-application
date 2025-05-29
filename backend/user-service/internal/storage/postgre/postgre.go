@@ -5,6 +5,8 @@ import (
 	"log"
 	"user-service/config"
 	"user-service/internal/storage"
+
+	_ "github.com/lib/pq"
 )
 
 func NewPostgreRepo(db *sql.DB) *storage.Repository {

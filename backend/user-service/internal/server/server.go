@@ -25,11 +25,11 @@ func NewAPIserver(cfg *config.Config) *APIserver {
 	}
 }
 
-func (srv *APIserver) run() {
+func (srv *APIserver) Run() {
 	db := postgre.ConnectPostgre(srv.cfg.DB)
 	repo := postgre.NewPostgreRepo(db)
 	serv := domain.NewService(repo)
-	handler := handler.NewHandler(serv)
+	handler := handler.NewHandler(serv, srv.cfg.JwtSecret)
 
 	serverAddress := srv.cfg.HttpServer.Address
 	serverPort := fmt.Sprintf(":%s", srv.cfg.HttpServer.Port)
