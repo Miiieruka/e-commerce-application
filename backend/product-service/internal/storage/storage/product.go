@@ -146,7 +146,7 @@ func (repo *ProductRepository) UpdateProduct(ctx context.Context, id int64, upda
 		seller_id = $5
 		WHERE id = $6
 	`
-	_, err = repo.db.ExecContext(ctx, query, u.Name, u.Description, u.Price, u.ImgUrl, u.SellerID)
+	_, err = repo.db.ExecContext(ctx, query, u.Name, u.Description, u.Price, u.ImgUrl, u.SellerID, u.ID)
 	if err != nil {
 		return fmt.Errorf("%s: %w", op, err)
 	}
