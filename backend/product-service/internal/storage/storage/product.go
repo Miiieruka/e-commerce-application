@@ -120,33 +120,22 @@ func (repo *ProductRepository) DeleteProduct(ctx context.Context, id int64) erro
 	return fmt.Errorf("%s: %w", op, err)
 }
 
-func (repo *ProductRepository) UpdateProduct(ctx context.Context, id int64, updateFn func(*entities.Product) (bool, error)) error {
+func (repo *ProductRepository) UpdateProduct(ctx context.Context, id int64, u *entities.Product) error {
 	const op = "storage.updateproduct"
 
-	u, err := repo.GetProductById(ctx, id)
+	_, err := repo.GetProductById(ctx, id)
 	if err != nil {
 		return fmt.Errorf("%s: %w", op, err)
 	}
-	needUpdate, err := updateFn(u)
-
-	if err != nil {
-		return fmt.Errorf("%s: %w", op, err)
-	}
-
-	if !needUpdate {
-		return nil
-	}
-
 	query := `
 		UPDATE products SET
 		name = $1,
 		description = $2,
 		price = $3,
 		image_url = $4,
-		seller_id = $5
-		WHERE id = $6
+		WHERE id = $5
 	`
-	_, err = repo.db.ExecContext(ctx, query, u.Name, u.Description, u.Price, u.ImgUrl, u.SellerID, u.ID)
+	_, err = repo.db.ExecContext(ctx, query, u.Name, u.Description, u.Price, u.ImgUrl, id)
 	if err != nil {
 		return fmt.Errorf("%s: %w", op, err)
 	}

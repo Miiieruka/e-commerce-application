@@ -8,11 +8,18 @@ import (
 )
 
 type Config struct {
-	Env        string     `yaml:"env" env-default:"local"`
-	DB         DBConfig   `yaml:"db"`
-	Redis      string     `yaml:"redis"`
-	HttpServer HTTPServer `yaml:"http_server"`
-	JwtSecret  string     `yaml:"jwt_secret"`
+	Env          string           `yaml:"env" env-default:"local"`
+	DB           DBConfig         `yaml:"db"`
+	Redis        string           `yaml:"redis"`
+	HttpServer   HTTPServer       `yaml:"http_server"`
+	JwtSecret    string           `yaml:"jwt_secret"`
+	CloudyConfig CloudinaryConfig `yaml:"cloudy"`
+}
+
+type CloudinaryConfig struct {
+	Name      string `yaml:"cloudy_name"`
+	ApiKey    string `yaml:"api_key"`
+	ApiSecret string `yaml:"api_secret"`
 }
 
 type DBConfig struct {

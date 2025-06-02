@@ -1,11 +1,15 @@
 env: 'local' #local, prod, dev
 http_server:
-  address: 'localhost:8080'
-  timeout: 4s
-  idle_timeout: 30s
+  address: 'localhost'
+  port : '8082'
 db:
   driver: 'postgres'
   dsn: 'postgresql://ecommerce_o1bz_user:gjocOwoPV12BoA0IZL4oWekLIzPH17iy@dpg-d0q69gmmcj7s73epuv60-a.frankfurt-postgres.render.com/ecommerce_o1bz?sslmode=require'
 redis: 'rediss://red-d0skgbumcj7s73f3maog:8AySD57481L4VLykGcRr2pgJbdKsRuh5@frankfurt-keyvalue.render.com:6379'
+
+cloudy:
+  cloudy_name:
+  api_key:
+  api_secret:
 
 jwt_secret: "s3cr3tKey_for_JWT_123!@#G0Sup3rStr0ng"
