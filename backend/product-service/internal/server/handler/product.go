@@ -9,7 +9,6 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/gin-gonic/gin/binding"
 )
 
 func (h *Handler) SaveProduct(c *gin.Context) {
@@ -17,35 +16,43 @@ func (h *Handler) SaveProduct(c *gin.Context) {
 		c.JSON(http.StatusForbidden, gin.H{"error": "only sellers can add products"})
 		return
 	}
-	var req entities.ProductRequest
-	if err := c.ShouldBindWith(&req, binding.FormMultipart); err != nil {
-		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "invalid input"})
-		fmt.Printf("save product: %s\n", err.Error())
+
+	image, err := c.FormFile("img_url")
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "image is required"})
+		return
+	}
+	fmt.Printf("%s", image.Filename)
+	name := c.PostForm("name")
+	description := c.PostForm("description")
+	priceStr := c.PostForm("price")
+
+	price, err := strconv.ParseFloat(priceStr, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid price"})
 		return
 	}
 
-	ctx, cancel := context.WithTimeout(c.Request.Context(), time.Second*2)
+	ctx, cancel := context.WithTimeout(c.Request.Context(), 3*time.Second)
 	defer cancel()
 
-	url, err := h.services.ImageService.UploadImage(ctx, req.Image)
-
+	url, err := h.services.ImageService.UploadImage(ctx, image)
 	if err != nil {
-		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "image was not uploaded"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to upload image"})
 		fmt.Printf("save product: %s\n", err.Error())
 		return
 	}
 
 	prod := &entities.Product{
-		Name:        req.Name,
-		SellerID:    c.GetInt64("user_id"),
-		Price:       req.Price,
-		Description: req.Description,
+		Name:        name,
+		Description: description,
+		Price:       price,
 		ImgUrl:      url,
+		SellerID:    c.GetInt64("user_id"),
 		CreatedAt:   time.Now(),
 	}
 
-	err = h.services.ProductService.CreateProduct(ctx, prod)
-	if err != nil {
+	if err := h.services.ProductService.CreateProduct(ctx, prod); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to save product"})
 		fmt.Printf("save product: %s\n", err.Error())
 		return
@@ -107,6 +114,7 @@ func (h *Handler) UpdateProduct(c *gin.Context) {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "invalid json"})
 		return
 	}
+	fmt.Printf("%s\n", updatedProduct.Description)
 
 	err = h.services.ProductService.UpdateProduct(ctxWithDeadline, id, &updatedProduct)
 	if err != nil {

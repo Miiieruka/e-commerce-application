@@ -8,8 +8,8 @@ db:
 redis: 'rediss://red-d0skgbumcj7s73f3maog:8AySD57481L4VLykGcRr2pgJbdKsRuh5@frankfurt-keyvalue.render.com:6379'
 
 cloudy:
-  cloudy_name:
-  api_key:
-  api_secret:
+  cloudy_name: 'dgrj4rqsc'
+  api_key: '233587277167489'
+  api_secret: '1cmJqB6sxK47WKN54JVXoxpWXcc'
 
 jwt_secret: "s3cr3tKey_for_JWT_123!@#G0Sup3rStr0ng"

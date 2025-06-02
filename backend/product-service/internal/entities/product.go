@@ -10,7 +10,7 @@ type Product struct {
 	SellerID    int64
 	Name        string
 	Description string
-	Price       int64
+	Price       float64
 	ImgUrl      string
 	CreatedAt   time.Time
 }
@@ -18,13 +18,12 @@ type Product struct {
 type ProductRequest struct {
 	Name        string                `json:"name"`
 	Description string                `json:"description"`
-	Price       int64                 `json:"price"`
+	Price       float64               `json:"price"`
 	Image       *multipart.FileHeader `json:"img_url"`
-	SellerId    int64
 }
 
 type ProductUpdateRequest struct {
-	Name        string `json:"name"`
-	Description string `json:"description"`
-	Price       int64  `json:"price"`
+	Name        string  `json:"name"`
+	Description string  `json:"description"`
+	Price       float64 `json:"price"`
 }

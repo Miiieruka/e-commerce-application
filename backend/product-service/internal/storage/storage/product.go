@@ -116,6 +116,7 @@ func (repo *ProductRepository) DeleteProduct(ctx context.Context, id int64) erro
 	if err == nil {
 		key := fmt.Sprintf("product:%d", id)
 		repo.rdb.Del(ctx, key)
+		return nil
 	}
 	return fmt.Errorf("%s: %w", op, err)
 }
@@ -131,14 +132,14 @@ func (repo *ProductRepository) UpdateProduct(ctx context.Context, id int64, u *e
 		UPDATE products SET
 		name = $1,
 		description = $2,
-		price = $3,
-		image_url = $4,
-		WHERE id = $5
+		price = $3
+		WHERE id = $4
 	`
-	_, err = repo.db.ExecContext(ctx, query, u.Name, u.Description, u.Price, u.ImgUrl, id)
-	if err != nil {
-		return fmt.Errorf("%s: %w", op, err)
+	_, err = repo.db.ExecContext(ctx, query, u.Name, u.Description, u.Price, id)
+	if err == nil {
+		key := fmt.Sprintf("product:%d", id)
+		repo.rdb.Del(ctx, key)
+		return nil
 	}
-
-	return nil
+	return fmt.Errorf("%s: %w", op, err)
 }

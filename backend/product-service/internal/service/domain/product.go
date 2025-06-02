@@ -29,6 +29,11 @@ func (s *ProductService) DeleteProduct(ctx context.Context, id int64) error {
 	return s.repo.ProductRepo.DeleteProduct(ctx, id)
 }
 func (s *ProductService) UpdateProduct(ctx context.Context, id int64, pr *entities.ProductUpdateRequest) error {
-	// return s.repo.ProductRepo.UpdateProduct(ctx, id, pr)
-	return nil
+	prod := &entities.Product{
+		Name:        pr.Name,
+		Description: pr.Description,
+		Price:       pr.Price,
+	}
+
+	return s.repo.ProductRepo.UpdateProduct(ctx, id, prod)
 }
