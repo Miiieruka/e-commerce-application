@@ -8,7 +8,7 @@ import (
 type OrderRepository interface {
 	Create(ctx context.Context, order *domain.Order) error
 	GetByID(ctx context.Context, id uint) (*domain.Order, error)
-	GetByBuyerID(ctx context.Context, buyerID uint) ([]domain.Order, error)
+	GetHistoryByBuyerID(ctx context.Context, buyerID uint) ([]domain.Order, error)
 	UpdateStatus(ctx context.Context, id uint, status string) error
 }
 
