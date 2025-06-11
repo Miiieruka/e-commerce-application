@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "gen/go/paymentpb";
+
+service PaymentService {
+    rpc ProcessPayment(PaymentRequest) returns (PaymentResponse);
+}
+
+message PaymentRequest {
+    int32 buyerID = 1;
+    int32 productID = 2;
+    double amount = 3;
+}
+
+message PaymentResponse {
+    string status = 1;
+}
