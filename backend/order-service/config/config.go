@@ -8,11 +8,12 @@ import (
 )
 
 type Config struct {
-	Env        string     `yaml:"env" env-default:"local"`
-	DB         DBConfig   `yaml:"db"`
-	Redis      string     `yaml:"redis"`
-	HttpServer HTTPServer `yaml:"http_server"`
-	JwtSecret  string     `yaml:"jwt_secret"`
+	Env            string     `yaml:"env" env-default:"local"`
+	DB             DBConfig   `yaml:"db"`
+	Redis          string     `yaml:"redis"`
+	HttpServer     HTTPServer `yaml:"http_server"`
+	JwtSecret      string     `yaml:"jwt_secret"`
+	PayServiceAddr string     `yaml:"pay_service_addr" env-default:"localhost:3000"`
 }
 
 type DBConfig struct {

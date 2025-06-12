@@ -22,7 +22,7 @@ func (h *Handler) SaveProduct(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "image is required"})
 		return
 	}
-	fmt.Printf("%s", image.Filename)
+	fmt.Printf("%s\n", image.Filename)
 	name := c.PostForm("name")
 	description := c.PostForm("description")
 	priceStr := c.PostForm("price")
