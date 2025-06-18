@@ -7,6 +7,6 @@ db:
   dsn: 'postgresql://ecommerce_o1bz_user:gjocOwoPV12BoA0IZL4oWekLIzPH17iy@dpg-d0q69gmmcj7s73epuv60-a.frankfurt-postgres.render.com/ecommerce_o1bz?sslmode=require'
 redis: 'rediss://red-d0skgbumcj7s73f3maog:8AySD57481L4VLykGcRr2pgJbdKsRuh5@frankfurt-keyvalue.render.com:6379'
 
-pay_service_addr: 'http://localhost:3000'
+pay_service_addr: 'localhost:3000'
 
 jwt_secret: "s3cr3tKey_for_JWT_123!@#G0Sup3rStr0ng"

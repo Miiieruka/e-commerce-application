@@ -48,7 +48,7 @@ func (h *OrderHandler) CreateOrder(c *gin.Context) {
 	}
 	responseOrder, err := h.srv.CreateOrder(ctx, uint(buyerID), orderItems)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create order"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 

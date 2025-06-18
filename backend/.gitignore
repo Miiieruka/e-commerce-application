@@ -3,3 +3,4 @@ auth-service/config/config.yaml
 user-service/config/config.yaml
 product-service/config/config.yaml
 order-service/config/config.yaml
+payment-service/config/config.yaml

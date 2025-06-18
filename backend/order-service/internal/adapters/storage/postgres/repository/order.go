@@ -27,17 +27,17 @@ func (r *OrderRepository) Create(ctx context.Context, order *domain.Order) error
 	}
 	defer tx.Rollback()
 
-	query := `INSERT INTO orders (buyer_id, total_price, status, created_at) VALUES ($1, $2, $3, $4)`
-
+	query := `INSERT INTO orders (buyer_id, total_price, status, created_at) VALUES ($1, $2, $3, $4) RETURNING id`
 	err = tx.QueryRowContext(ctx, query, order.BuyerID, order.TotalPrice, order.Status, order.CreatedAt).Scan(&order.ID)
+	println(order.ID)
 	if err != nil {
-		return fmt.Errorf("%s: %w", op, err)
+		return fmt.Errorf("%s(insert order): %w", op, err)
 	}
 	for _, item := range order.Items {
 		itemQuery := `INSERT INTO order_items (order_id, product_id, quantity, price) VALUES ($1, $2, $3, $4)`
 		_, err = tx.ExecContext(ctx, itemQuery, order.ID, item.ProductID, item.Quantity, item.Price)
 		if err != nil {
-			return fmt.Errorf("%s: %w", op, err)
+			return fmt.Errorf("%s(insert order_item): %w", op, err)
 		}
 	}
 	err = tx.Commit()

@@ -1,0 +1,5 @@
+env: 'local' #local, prod, dev
+grpc_server:
+  address: localhost
+  port : 3000
+  timeout: 10h
