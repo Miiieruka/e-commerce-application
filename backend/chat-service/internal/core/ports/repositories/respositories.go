@@ -19,7 +19,7 @@ type MessageRepository interface {
 }
 
 type UserPresenceRepository interface {
-	SetOnline(userID string) error
-	SetOffline(userID string) error
-	IsOnline(userID string) (bool, error)
+	SetOnline(ctx context.Context, userID string) error
+	SetOffline(ctx context.Context, userID string) error
+	IsOnline(ctx context.Context, userID string) (bool, error)
 }
