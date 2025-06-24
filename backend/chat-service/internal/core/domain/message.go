@@ -1,10 +1,12 @@
 package domain
 
+import "time"
+
 type Message struct {
 	ID        int
 	RoomID    int
 	Content   string
 	SenderID  int
-	CreatedAt string
-	UpdatedAt string
+	CreatedAt time.Time
+	UpdatedAt time.Time
 }
